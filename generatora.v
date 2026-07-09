@@ -7,14 +7,18 @@ parameter s3=3'b011;
 parameter s4=3'b100;
 
 reg [2:0] nextstate;
-always @(posedge clk)
+always @(posedge clk or posedge rstn)
 begin
        if(rstn==1'b1)
        begin
              state<=s0;
+             dout<=0;
        end
        else
-       state<=nextstate;
+       begin
+            state<=nextstate;
+       end
+            
 end
 always @(*)
 begin
@@ -56,8 +60,8 @@ wire dout;
 generatora g1(.clk(clk),.rstn(rstn),.dout(dout));
 initial
 begin
-       $dumpfile("dump.vcd");
-       $dumpvars();
+       $dumpfile("generator.vcd");
+       $dumpvars(0,generatora_tb);
        #100 ;
        $finish;
 end
