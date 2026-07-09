@@ -1,6 +1,7 @@
 module detector(input clk,input rstn,input din,output reg dout=0);
 reg [1:0] state;
 reg [1:0] nextstate;
+reg doutt;
 parameter s0=2'b00;
 parameter s1=2'b01;
 parameter s2=2'b10;
@@ -15,6 +16,7 @@ begin
 	else
 	begin
 	        state<=nextstate;
+	        dout<=doutt;
 	end
 end
 	always @(state or din)
@@ -24,13 +26,14 @@ end
 			begin
 				if(din==1'b0)
 				begin
+					doutt<=0;
 					nextstate<=s0;
-					dout<=0;
 			        end
 				else
 				begin
+                                        doutt<=0;				
 					nextstate<=s1;
-					dout<=0;
+					
 					
 				end
 			end
@@ -38,14 +41,14 @@ end
 			begin
 				if(din==1'b0)
 				begin
+					doutt<=0;
 					nextstate<=s0;
-					dout<=0;
 					
 				end
 				else
 				begin
+				        doutt<=0;
 					nextstate<=s2;
-					dout<=0;
 					
 				end
 			end
@@ -53,14 +56,14 @@ end
 			begin
 				if(din==1'b0)
 				begin
+				        doutt<=0;
 					nextstate<=s3;
-					dout<=0;
 					
 				end
 				else
 				begin
+				        doutt<=0;
 					nextstate<=s2;
-					dout<=0;
 					
 				end
 			end
@@ -68,16 +71,21 @@ end
 			begin
 				if(din==1'b1)
 				begin
-					nextstate<=s1;
-				        dout<=1;
+				        doutt<=1;
+				        nextstate<=s1;
 				end
 			        else
 			        begin
+					doutt<=0;
 					nextstate<=s0;
-					dout<=0;
 					
 			        end
 			end
+			default:
+			begin
+			                doutt<=0;
+			                nextstate<=s0;
+		        end
 		endcase
 	end
 endmodule
@@ -93,8 +101,8 @@ detector d1(.clk(clk),.rstn(rstn),.din(din),.dout(dout));
 initial
 begin   
         //$monitor("dout=%b",dout);
-	$dumpfile("dump.vcd");
-	$dumpvars();
+	$dumpfile("detector.vcd");
+	$dumpvars(0,detector_tb);
 	#500;
 	$finish;
 end
