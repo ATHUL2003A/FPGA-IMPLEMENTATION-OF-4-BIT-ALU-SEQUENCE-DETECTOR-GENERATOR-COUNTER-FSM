@@ -87,8 +87,8 @@ wire [3:0]OUT2;
 alu a(.clk(clk),.A(A),.B(B),.SEL(SEL),.C(C),.OUT1(OUT1),.OUT2(OUT2));
 initial
 begin
-      $dumpfile("dump.vcd");
-      $dumpvars();
+      $dumpfile("alu.vcd");
+      $dumpvars(0,alu_tb);
       #200;
       $finish;
 end
